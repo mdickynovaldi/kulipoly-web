@@ -1,0 +1,10 @@
+<svg width="485" height="324" viewBox="0 0 485 324" fill="none" xmlns="http://www.w3.org/2000/svg">
+<g opacity="0.05">
+<path d="M324 324L324 163L163 324L324 324Z" fill="black" stroke="black" stroke-width="4" stroke-linejoin="round"/>
+<path d="M324 163L324 324L485 163L324 163Z" stroke="black" stroke-width="4" stroke-linejoin="round"/>
+<path d="M163 163L163 324L2.00001 163L163 163Z" fill="black" stroke="black" stroke-width="4" stroke-linejoin="round"/>
+<path d="M163 163L163 324L324 163L163 163Z" stroke="black" stroke-width="4" stroke-linejoin="round"/>
+<path d="M324 2.00024L324 163L485 2.00024L324 2.00024Z" stroke="black" stroke-width="4" stroke-linejoin="round"/>
+<path d="M485 163L485 2.00025L324 163L485 163Z" fill="black" stroke="black" stroke-width="4" stroke-linejoin="round"/>
+</g>
+</svg>
