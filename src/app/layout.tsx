@@ -36,9 +36,9 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body className={`${faktum.className}  antialiased`}>
+        {children}
         <Navbar />
         <Sidebar />
-        {children}
       </body>
     </html>
   );

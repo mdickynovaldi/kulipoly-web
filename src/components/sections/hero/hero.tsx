@@ -7,7 +7,7 @@ import { TextScramble } from "@/components/ui/text-scramble";
 export default function Hero() {
   const words = ["AR", "VR", "DIGITAL TWIN", "ANIMATION"];
   return (
-    <section className="w-full h-screen">
+    <section id="hero" className="w-full h-screen">
       <div className="w-full h-screen relative">
         <div className="absolute inset-0 z-10 pointer-events-none" aria-hidden>
           <div className="  mt-36 pl-28   flex flex-col gap-10 w-full">
@@ -75,8 +75,8 @@ export default function Hero() {
           scene="https://prod.spline.design/5JZhv0Zi2z0yUG4Y/scene.splinecode"
         />
       </div>
-      <div className="absolute bottom-30 right-270">
-        <Image src="/ornamen.svg" alt="hero-image" width={400} height={400} />
+      <div className="absolute top-0 left-0">
+        <Image src="/ornamen.svg" alt="hero-image" width={500} height={500} />
       </div>
       <div className="absolute bottom-0 right-0">
         <Image src="/ornamen2.svg" alt="hero2-image" width={400} height={400} />
