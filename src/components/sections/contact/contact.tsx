@@ -1,6 +1,51 @@
+"use client";
+
 import Image from "next/image";
+import { useState, FormEvent } from "react";
+import { useTranslation } from "@/lib/i18n";
+
+type FormStatus = "idle" | "sending" | "success" | "error";
 
 export default function Contact() {
+  const { t } = useTranslation();
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    phone: "",
+    message: "",
+  });
+  const [status, setStatus] = useState<FormStatus>("idle");
+  const [errorMessage, setErrorMessage] = useState("");
+
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    setStatus("sending");
+    setErrorMessage("");
+
+    try {
+      const response = await fetch("/api/contact", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(formData),
+      });
+
+      if (!response.ok) {
+        const data = await response.json();
+        throw new Error(data.error || "Failed to send message");
+      }
+
+      setStatus("success");
+      setFormData({ name: "", email: "", phone: "", message: "" });
+    } catch (error) {
+      setStatus("error");
+      setErrorMessage(
+        error instanceof Error ? error.message : t.contact.errorMessage
+      );
+    }
+  };
+
   return (
     <section id="contact" className="w-full bg-black">
       <div className="mx-auto w-full max-w-7xl px-6 py-20 lg:py-28">
@@ -8,9 +53,9 @@ export default function Contact() {
           {/* Left: Intro, logo, address, contact info */}
           <div className="flex flex-col items-center lg:items-start">
             <p className="text-center text-sm text-gray-200 lg:text-left">
-              Not sure where to start ? We offer a{" "}
-              <span className="font-semibold text-white">free</span>{" "}
-              consultation to discuss your 3D production needs
+              {t.contact.freeConsultation}{" "}
+              <span className="font-semibold text-white">{t.contact.free}</span>{" "}
+              {t.contact.discussNeeds}
             </p>
             <div className="mt-10 flex flex-col items-center lg:items-start">
               <Image
@@ -20,23 +65,33 @@ export default function Contact() {
                 height={220}
                 priority={false}
               />
-              <h2 className="mt-6 text-2xl font-bold text-white">Address</h2>
+              <h2 className="mt-6 text-2xl font-bold text-white">
+                {t.contact.address}
+              </h2>
               <p className="mt-2 text-sm text-white">
-                Jl. Singosari XXX Kecamatan Lowokwaru Kota Malang Jawa Timur
+                Perumahan Banjararum Asri, Jl. Selandia Baru Blok BB-2,
+                Singosari, Kab. Malang 65153, Jawa Timur
               </p>
             </div>
             <div className="mt-12 grid w-full grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3">
               <div>
-                <p className="text-base font-semibold text-white">Email</p>
-                <p className="mt-2 text-sm text-gray-300">kulipoli@kp.global</p>
+                <p className="text-base font-semibold text-white">
+                  {t.contact.email}
+                </p>
+                <p className="mt-2 text-sm text-gray-300">
+                  contact@kulipoly.com
+                </p>
               </div>
               <div>
-                <p className="text-base font-semibold text-white">Phone</p>
-                <p className="mt-2 text-sm text-gray-300">+62 82215079351</p>
-                <p className="text-sm text-gray-300">+62 82115079999</p>
+                <p className="text-base font-semibold text-white">
+                  {t.contact.phone}
+                </p>
+                <p className="mt-2 text-sm text-gray-300">+62 85156262400</p>
               </div>
               <div>
-                <p className="text-base font-semibold text-white">Follow us</p>
+                <p className="text-base font-semibold text-white">
+                  {t.contact.followUs}
+                </p>
                 <div className="mt-3 flex items-center gap-3">
                   <a
                     href="#"
@@ -88,62 +143,103 @@ export default function Contact() {
           <div className="lg:pl-4">
             <div className="rounded-2xl border border-white/10 bg-neutral-950 p-7 shadow-[0_0_0_1px_rgba(255,255,255,0.04)_inset] md:p-10">
               <h3 className="text-2xl font-extrabold tracking-wide text-white">
-                GET IN TOUCH
+                {t.contact.getInTouch}
               </h3>
-              <form className="mt-8 flex flex-col gap-8" action="#">
+              <form
+                className="mt-8 flex flex-col gap-8"
+                onSubmit={handleSubmit}>
                 <div className="flex flex-col gap-2">
                   <label htmlFor="name" className="text-sm text-white/80">
-                    Name
+                    {t.contact.name}
                   </label>
                   <input
                     id="name"
                     type="text"
+                    required
+                    value={formData.name}
+                    onChange={(e) =>
+                      setFormData({ ...formData, name: e.target.value })
+                    }
                     className="w-full border-b border-white/20 bg-transparent py-2 text-white outline-none transition-colors placeholder:text-white/40 focus:border-orange-500"
                     placeholder=""
-                    aria-label="Name"
+                    aria-label={t.contact.name}
+                    disabled={status === "sending"}
                   />
                 </div>
                 <div className="flex flex-col gap-2">
                   <label htmlFor="email" className="text-sm text-white/80">
-                    Email
+                    {t.contact.email}
                   </label>
                   <input
                     id="email"
                     type="email"
+                    required
+                    value={formData.email}
+                    onChange={(e) =>
+                      setFormData({ ...formData, email: e.target.value })
+                    }
                     className="w-full border-b border-white/20 bg-transparent py-2 text-white outline-none transition-colors placeholder:text-white/40 focus:border-orange-500"
                     placeholder=""
-                    aria-label="Email"
+                    aria-label={t.contact.email}
+                    disabled={status === "sending"}
                   />
                 </div>
                 <div className="flex flex-col gap-2">
                   <label htmlFor="phone" className="text-sm text-white/80">
-                    Phone Number
+                    {t.contact.phoneNumber}
                   </label>
                   <input
                     id="phone"
                     type="tel"
+                    value={formData.phone}
+                    onChange={(e) =>
+                      setFormData({ ...formData, phone: e.target.value })
+                    }
                     className="w-full border-b border-white/20 bg-transparent py-2 text-white outline-none transition-colors placeholder:text-white/40 focus:border-orange-500"
                     placeholder=""
-                    aria-label="Phone Number"
+                    aria-label={t.contact.phoneNumber}
+                    disabled={status === "sending"}
                   />
                 </div>
                 <div className="flex flex-col gap-2">
                   <label htmlFor="message" className="text-sm text-white/80">
-                    Message
+                    {t.contact.message}
                   </label>
                   <textarea
                     id="message"
                     rows={4}
+                    required
+                    value={formData.message}
+                    onChange={(e) =>
+                      setFormData({ ...formData, message: e.target.value })
+                    }
                     className="w-full resize-none border-b border-white/20 bg-transparent pb-2 text-white outline-none transition-colors placeholder:text-white/40 focus:border-orange-500"
                     placeholder=""
-                    aria-label="Message"
+                    aria-label={t.contact.message}
+                    disabled={status === "sending"}
                   />
                 </div>
+
+                {/* Status Messages */}
+                {status === "success" && (
+                  <div className="rounded-lg bg-green-500/10 border border-green-500/30 p-4 text-green-400">
+                    {t.contact.successMessage}
+                  </div>
+                )}
+                {status === "error" && (
+                  <div className="rounded-lg bg-red-500/10 border border-red-500/30 p-4 text-red-400">
+                    {errorMessage || t.contact.errorMessage}
+                  </div>
+                )}
+
                 <div className="pt-2">
                   <button
                     type="submit"
-                    className="inline-flex items-center justify-center rounded-full bg-gradient-to-r from-orange-500 to-red-600 px-7 py-4 font-bold uppercase tracking-wide text-white transition-colors hover:from-orange-600 hover:to-red-700">
-                    SEND MESSAGE
+                    disabled={status === "sending"}
+                    className="inline-flex items-center justify-center rounded-full bg-gradient-to-r from-orange-500 to-red-600 px-7 py-4 font-bold uppercase tracking-wide text-white transition-colors hover:from-orange-600 hover:to-red-700 disabled:cursor-not-allowed disabled:opacity-70">
+                    {status === "sending"
+                      ? t.contact.sending
+                      : t.contact.sendMessage}
                   </button>
                 </div>
               </form>

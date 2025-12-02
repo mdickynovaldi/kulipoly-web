@@ -5,6 +5,7 @@ import "./globals.css";
 
 import Navbar from "@/components/layout/header/navbar";
 import Sidebar from "@/components/layout/sidebar/sidebar";
+import { LanguageProvider } from "@/lib/i18n";
 
 const faktum = localFont({
   src: [
@@ -36,9 +37,11 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body className={`${faktum.className}  antialiased`}>
-        {children}
-        <Navbar />
-        <Sidebar />
+        <LanguageProvider>
+          {children}
+          <Navbar />
+          <Sidebar />
+        </LanguageProvider>
       </body>
     </html>
   );
